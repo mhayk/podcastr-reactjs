@@ -1,4 +1,5 @@
 import { GetStaticProps } from "next"
+import Link from 'next/link'
 import Image from 'next/image'
 import { format, parseISO } from "date-fns"
 import enGB from 'date-fns/locale/en-GB'
@@ -45,7 +46,9 @@ export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
                   />
 
                   <div className={styles.episodeDetails}>
-                    <a href="">{episode.title}</a>
+                    <Link href={`/episodes/${episode.id}`}>
+                      <a>{episode.title}</a>
+                    </Link>
                     <p>{episode.members}</p>
                     <span>{episode.publishedAt}</span>
                     <span>{episode.durationAsString}</span>
@@ -66,12 +69,14 @@ export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
 
         <table cellSpacing={0}>
           <thead>
-            <th></th>
-            <th>Podcast</th>
-            <th>Members</th>
-            <th>Date</th>
-            <th>Duration</th>
-            <th></th>
+            <tr>
+              <th></th>
+              <th>Podcast</th>
+              <th>Members</th>
+              <th>Date</th>
+              <th>Duration</th>
+              <th></th>
+            </tr>
           </thead>
           <tbody>
             {allEpisodes.map(episode => {
@@ -87,7 +92,11 @@ export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
                     />
                   </td>
                   <td>
-                    <a href="">{episode.title}</a>
+                    <Link href={`/episodes/${episode.id}`}>
+                      <a>
+                        {episode.title}
+                      </a>
+                    </Link>
                   </td>
                   <td>{episode.members}</td>
                   <td style={{ width: 100 }}>{episode.publishedAt}</td>
@@ -126,7 +135,6 @@ export const getStaticProps: GetStaticProps = async () => {
       publishedAt: format(parseISO(episode.published_at), 'd MMM yy', { locale: enGB }),
       duration: Number(episode.file.duration),
       durationAsString: convertDurationToTimeString(Number(episode.file.duration)),
-      description: episode.file.url,
       url: episode.file.url,
     }
   })
