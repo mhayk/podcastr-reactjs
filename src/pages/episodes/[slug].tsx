@@ -3,6 +3,7 @@ import enGB from 'date-fns/locale/en-GB'
 import { GetStaticProps, GetStaticPaths } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
+import { usePlayer } from '../../contexts/PlayerContext';
 // import { useRouter } from 'next/router'
 import { api } from '../../services/api';
 import { convertDurationToTimeString } from '../../utils/convertDurationToTimeString';
@@ -26,6 +27,8 @@ type EpisodeProps = {
 }
 
 export default function Episode({ episode }: EpisodeProps) {
+    const { play } = usePlayer()
+
     // it is requered if fallback is true in getStaticPaths
     // const router = useRouter();
 
@@ -48,7 +51,7 @@ export default function Episode({ episode }: EpisodeProps) {
                     src={episode.thumbnail}
                     objectFit="cover"
                 />
-                <button type="button">
+                <button type="button" onClick={() => play(episode)}>
                     <img src="/play.svg" alt="Play episode" />
                 </button>
             </div>
