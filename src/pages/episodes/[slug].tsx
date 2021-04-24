@@ -3,7 +3,7 @@ import enGB from 'date-fns/locale/en-GB'
 import { GetStaticProps, GetStaticPaths } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/router'
+// import { useRouter } from 'next/router'
 import { api } from '../../services/api';
 import { convertDurationToTimeString } from '../../utils/convertDurationToTimeString';
 
@@ -26,6 +26,13 @@ type EpisodeProps = {
 }
 
 export default function Episode({ episode }: EpisodeProps) {
+    // it is requered if fallback is true in getStaticPaths
+    // const router = useRouter();
+
+    // if (router.isFallback) {
+    //     return <p>Loading...</p>
+    // }
+
     return (
         <div className={styles.episode}>
             <div className={styles.thumbnailContainer}>
@@ -62,9 +69,28 @@ export default function Episode({ episode }: EpisodeProps) {
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
+    const { data } = await api.get('/episodes', {
+        params: {
+            _limit: 12,
+            _sort: 'published_at',
+            _order: 'desc'
+        }
+    })
+
+    const paths = data.map(episode => {
+        return {
+            params: {
+                slug: episode.id
+            }
+        }
+    })
     return {
-        paths: [],
+        paths,
         fallback: 'blocking'
+
+        // fallback: false // -> return 404
+        // fallback: true // -> runs in the client side. incremental static regeneration.
+        // fallback: blocking // -> SEO is the best option. incremental static regeneration.
     }
 }
 
