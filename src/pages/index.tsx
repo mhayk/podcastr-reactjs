@@ -1,5 +1,6 @@
 import { GetStaticProps } from "next"
 import Link from 'next/link'
+import Head from 'next/head'
 import Image from 'next/image'
 import { format, parseISO } from "date-fns"
 import enGB from 'date-fns/locale/en-GB'
@@ -32,6 +33,9 @@ export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
 
   return (
     <div className={styles.homepage}>
+      <Head>
+        <title>Home | Postcastr</title>
+      </Head>
       <section className={styles.latestEpisodes}>
         <h2>Lastest releases</h2>
 
